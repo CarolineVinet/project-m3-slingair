@@ -10,6 +10,7 @@ const {
   newReservation,
   getReservations,
   getSeatMap,
+  getFlights,
 } = require("./public/handlers");
 
 express()
@@ -29,9 +30,9 @@ express()
   // endpoints
   .get("/seat-select", handleSeatSelect)
   .get("/flights/:id", getSeatMap)
-  //.get("/confirmed", getConfirmationPage)
+  .get("/flightList", getFlights)
   .post("/reservations", newReservation)
-  .get("/reservations", getReservations)
+  .get("/reservations/:id", getReservations)
 
   .use((req, res) => res.send("Not Found"))
   .listen(8000, () => console.log(`Listening on port 8000`));

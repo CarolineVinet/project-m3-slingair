@@ -14,25 +14,32 @@ const getSeatMap = (req, res) => {
   res.status(200).json({ seatDisplay });
 };
 
-const getConfirmationPage = (req, res) => {
-  //blank
-  res.status(200).json({});
-};
+//const getConfirmationPage = (req, res) => {
+//res.status(200).json({});
+//};
 
 const newReservation = (req, res) => {
   const resWithId = { ...req.body, id: uuidv4() };
   reservations.push(resWithId);
-  res.status(200).send("new reservation made");
+  res.status(200).json(resWithId.id);
 };
 
 const getReservations = (req, res) => {
-  res.status(200).send(reservations);
+  let id = req.params.id;
+  let reservation = reservations.find((reservation) => {
+    return reservation.id === id;
+  });
+  res.status(200).send(reservation);
+};
+
+const getFlights = (req, res) => {
+  res.status(200).json(Object.keys(flights));
 };
 
 module.exports = {
   handleSeatSelect,
-  getConfirmationPage,
   newReservation,
   getReservations,
   getSeatMap,
+  getFlights,
 };

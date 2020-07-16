@@ -6,7 +6,7 @@ const flightSubmit = document.getElementById("flight-submit");
 let selection = "";
 
 const renderSeats = (data) => {
-  //console.log(data);
+  seatsDiv.innerHTML = "";
   document.querySelector(".form-container").style.display = "block";
 
   const alpha = ["A", "B", "C", "D", "E", "F"];
@@ -78,17 +78,30 @@ const handleConfirmSeat = (event) => {
       surname: document.getElementById("surname").value,
       email: document.getElementById("email").value,
       flightNumber: flightInput.value,
-      seatNumber: document.getElementsByClassName("selected").innerText,
+      seatNumber: document.getElementsByClassName("selected")[0].innerText,
     }),
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
   })
-    .then((res) => res.JSON())
+    .then((res) => res.json())
     .then((data) => {
-      console.log(data);
+      window.location.href = "/confirmed?id=" + data;
     });
 };
 
-flightSubmit.addEventListener("click", toggleFormContent);
+flightInput.addEventListener("change", toggleFormContent);
+
+fetch("/flightList")
+  .then((res) => {
+    return res.json();
+  })
+  .then((dropdownList) => {
+    dropdownList.forEach((flightId) => {
+      const option = document.createElement("option");
+      option.innerText = flightId;
+      option.value = flightId;
+      flightInput.appendChild(option);
+    });
+  });
