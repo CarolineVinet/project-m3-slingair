@@ -64,10 +64,9 @@ const toggleFormContent = (event) => {
       .then((data) => {
         renderSeats(data);
       });
+  } else {
+    alert("invalid flight number"); //change that!
   }
-  // TODO: contact the server to get the seating availability
-  //      - only contact the server if the flight number is this format 'SA###'.
-  //      - Do I need to create an error message if the number is not valid?
 };
 
 const handleConfirmSeat = (event) => {
