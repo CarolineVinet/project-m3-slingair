@@ -1,1 +1,1 @@
-const { reservations } = require("./test-data/reservation");
+const { reservations } = require("./test-data/reservations");

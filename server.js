@@ -6,11 +6,11 @@ const morgan = require("morgan");
 const { flights } = require("./test-data/flightSeating");
 const {
   handleSeatSelect,
-  getConfirmationPage,
   newReservation,
   getReservations,
   getSeatMap,
   getFlights,
+  getResByEmail,
 } = require("./public/handlers");
 
 express()
@@ -32,6 +32,7 @@ express()
   .get("/flights/:id", getSeatMap)
   .get("/flightList", getFlights)
   .post("/reservations", newReservation)
+  .get("/findreservation/:email", getResByEmail)
   .get("/reservations/:id", getReservations)
 
   .use((req, res) => res.send("Not Found"))

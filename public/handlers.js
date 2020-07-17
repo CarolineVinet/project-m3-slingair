@@ -8,15 +8,10 @@ const handleSeatSelect = (req, res) => {
 };
 
 const getSeatMap = (req, res) => {
-  const flightNumber = req.params.id.toUpperCase();
+  const flightNumber = req.params.id;
   const seatDisplay = flights[flightNumber];
-  // console.log(flightNumber);
   res.status(200).json({ seatDisplay });
 };
-
-//const getConfirmationPage = (req, res) => {
-//res.status(200).json({});
-//};
 
 const newReservation = (req, res) => {
   const resWithId = { ...req.body, id: uuidv4() };
@@ -32,6 +27,15 @@ const getReservations = (req, res) => {
   res.status(200).send(reservation);
 };
 
+const getResByEmail = (req, res) => {
+  let email = req.params.email;
+  let reservation = reservations.find((reservation) => {
+    return reservation.email === email;
+  });
+
+  res.status(200).send(reservation);
+};
+
 const getFlights = (req, res) => {
   res.status(200).json(Object.keys(flights));
 };
@@ -41,5 +45,6 @@ module.exports = {
   newReservation,
   getReservations,
   getSeatMap,
+  getResByEmail,
   getFlights,
 };

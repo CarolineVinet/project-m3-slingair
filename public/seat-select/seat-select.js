@@ -2,6 +2,8 @@ const flightInput = document.getElementById("flight");
 const seatsDiv = document.getElementById("seats-section");
 const confirmButton = document.getElementById("confirm-button");
 const flightSubmit = document.getElementById("flight-submit");
+const emailInputField = document.getElementById("email-input-field");
+const findResButton = document.getElementById("findRes");
 
 let selection = "";
 
@@ -16,7 +18,7 @@ const renderSeats = (data) => {
     row.classList.add("fuselage");
     seatsDiv.appendChild(row);
     for (let s = 1; s < 7; s++) {
-      const seatNumber = `${r}${alpha[s - 1]}`; //assign occupied vs available value to each
+      const seatNumber = `${r}${alpha[s - 1]}`;
       const seat = document.createElement("li");
 
       // Two types of seats to render
@@ -54,19 +56,11 @@ const renderSeats = (data) => {
 
 const toggleFormContent = (event) => {
   const flightNumber = flightInput.value;
-  console.log("toggleFormContent: ", flightNumber);
-  const regexp = new RegExp("SA[0-9]{3}");
-  const correctFormat = regexp.test(flightNumber);
-  console.log(correctFormat);
-  if (correctFormat) {
-    fetch(`/flights/${flightNumber}`)
-      .then((res) => res.json())
-      .then((data) => {
-        renderSeats(data);
-      });
-  } else {
-    alert("invalid flight number"); //change that!
-  }
+  fetch(`/flights/${flightNumber}`)
+    .then((res) => res.json())
+    .then((data) => {
+      renderSeats(data);
+    });
 };
 
 const handleConfirmSeat = (event) => {
@@ -91,17 +85,36 @@ const handleConfirmSeat = (event) => {
     });
 };
 
-flightInput.addEventListener("change", toggleFormContent);
-
 fetch("/flightList")
   .then((res) => {
     return res.json();
   })
-  .then((dropdownList) => {
-    dropdownList.forEach((flightId) => {
+  .then((data) => {
+    data.forEach((flightId) => {
       const option = document.createElement("option");
       option.innerText = flightId;
       option.value = flightId;
       flightInput.appendChild(option);
     });
   });
+
+const getMatchingRes = (event) => {
+  const clientEmail = emailInputField.value;
+
+  fetch(`/findreservation/${clientEmail}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      window.location.href = "/confirmed?id=" + data.id;
+    });
+};
+
+flightInput.addEventListener("change", toggleFormContent);
+findResButton.addEventListener("click", getMatchingRes);
